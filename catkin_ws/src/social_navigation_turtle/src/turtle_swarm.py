@@ -2,7 +2,8 @@
 import rospy
 import time
 import random
-import numpy as np
+import math
+from numpy import *
 from geometry_msgs.msg import Twist
 from turtlesim.msg import Pose
 
@@ -19,25 +20,28 @@ class turtleLead():
 		vel_msg.angular.z = omega
 		self.vel_publisher.publish(vel_msg)
 
-	def calcVel(self,pose,wayPt)
+	def calcVel(self,pose,wayPt):
 		#wayPt in form [x,y]
-		xTurt = pose[1]; yTurt = pose[2]; thetaTurt = pose[3]; 
-		xWp = pose[1]; yWp = wayPt[2];
+		epsilon = 0.1;
+		xTurt = pose[0]; yTurt = pose[1]; thetaTurt = radians(pose[2]); 
+		xWp = wayPt[0]; yWp = wayPt[1];
 		xVect = xWp - xTurt
 		yVect = yWp - yTurt
-		vGlob = np.array([xVect],[yVect])/math.sqrt(xVect^2 + yVect^2)
-		print vGlob
+		mag = sqrt(xVect**2 + yVect**2)
+		vGlob = array([[xVect],[yVect]])/mag
 
+		R = array([[cos(thetaTurt),sin(thetaTurt)],[-sin(thetaTurt),cos(thetaTurt)]])
+		T = dot(array([[1,0],[0,1/epsilon]]),R)
+
+		vOut = dot(T,vGlob)
 
 
 if __name__ =='__main__':
-	drunkAF = drunkturtle()
+	drunkAF = turtleLead()
 	vel_msg = Twist()
 	vel_msg.linear.x = 1
 	timenow = time.time()
-	while(time.time()-timenow < 5):
-		drunkAF.stumbleForward(0.5)
-		drunkAF.rate.sleep()
-	pose = np.array([0,0,0])
-	wayPt = np.array([1,1])
+
+	pose = array([0,0,0])
+	wayPt = array([1.,1.])
 	drunkAF.calcVel(pose,wayPt)
