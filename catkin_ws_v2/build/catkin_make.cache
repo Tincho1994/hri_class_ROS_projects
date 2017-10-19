@@ -1,0 +1,2 @@
+hlpr_speech/hlpr_speech:hlpr_speech/hlpr_speech_msgs:hlpr_speech/hlpr_speech_recognition:hlpr_speech/hlpr_speech_synthesis:speech_turtle
+-DCATKIN_DEVEL_PREFIX=/home/martin/HRI/catkin_ws_v2/devel -DCMAKE_INSTALL_PREFIX=/home/martin/HRI/catkin_ws_v2/install -G Unix Makefiles
